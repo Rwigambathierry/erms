@@ -37,10 +37,10 @@ RUN mkdir -p /var/log/supervisor /var/run/php-fpm /var/run/mysqld \
     && chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 
 # Copy supervisor configuration
-COPY supervisord.conf /etc/supervisor/supervisord.conf
+RUN mv supervisord.conf /etc/supervisor/supervisord.conf
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/sites-available/default
+RUN mv nginx.conf /etc/nginx/sites-available/default
 
 # Initialize MySQL
 RUN service mysql start && \
@@ -48,7 +48,7 @@ RUN service mysql start && \
     mysql miniproject < /var/www/html/database.txt; exit 0
 
 # Expose ports
-EXPOSE 80 3306
+EXPOSE 80
 
 # Start supervisord
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
